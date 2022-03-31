@@ -3,10 +3,10 @@
     <el-row>
       <el-col :span="24">
         <ul>
-          <li>
+          <li @click="OpenLogin">
             <el-link :underline="false">登录</el-link>
           </li>
-          <li>
+          <li @click="OpenRegister">
             <el-link :underline="false">注册</el-link>
           </li>
           <li>
@@ -57,8 +57,20 @@
       </el-col>
     </el-row>
 </div>
+  <LoginCom />
+  <RegisterCom />
 </template>
 <script setup> 
+import LoginCom from "./LoginCom.vue";
+import RegisterCom from "./RegisterCom.vue";
+import { useStore } from 'vuex'
+const store = useStore()
+const OpenLogin = () => {
+  store.commit('OpenLogin')
+}
+const OpenRegister=()=>{
+  store.commit('OpenRegister')
+}
 </script>
 <style lang="scss">
 ul {
