@@ -9,7 +9,7 @@ export const getBanners = () => {
 export const getBanners2 = () => {
     return axios.get(http.value + "/Image/GetImages");
 }
-export const getFlowers = () => {
-    return axios.get(http.value + "/Flower/GetFlowers");
+export const getFlowers = (parms: {}) => {
+    return axios.post(http.value + "/Flower/GetFlowers",parms);
 }
 
