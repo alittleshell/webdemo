@@ -22,7 +22,7 @@ import { ref, onMounted } from 'vue'
 import { GetOrder } from '../http/index'
 const list = ref();
 onMounted(async () => {
-    list.value = (await GetOrder()).data.result
+    list.value = (await GetOrder())
 })
 </script>
 <style lang="scss" scoped>
