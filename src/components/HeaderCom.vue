@@ -1,21 +1,21 @@
 <template>
-<div>
+  <div>
     <el-row>
       <el-col :span="24">
         <ul>
-          <li @click="OpenLogin">
+          <li v-if="store.state.NickName == undefined" @click="OpenLogin">
             <el-link :underline="false">登录</el-link>
           </li>
-          <li @click="OpenRegister">
+          <li v-if="store.state.NickName == undefined" @click="OpenRegister">
             <el-link :underline="false">注册</el-link>
           </li>
-          <li>
-            <el-link :underline="false">张三</el-link>
+          <li v-if="store.state.NickName != undefined"> 
+            <el-link :underline="false">{{store.state.NickName}}</el-link>
           </li>
-          <li>
+          <li v-if="store.state.NickName != undefined">
             <el-link :underline="false" href="/personcenter">个人中心</el-link>
           </li>
-          <li>
+          <li v-if="store.state.NickName != undefined" @click="LogOut">
             <el-link :underline="false">注销</el-link>
           </li>
         </ul>
@@ -24,20 +24,24 @@
     <el-row>
       <el-col :span="8">
         <el-link :underline="false" href="/">
-          <el-image style="width: 200px; height: 100px" src="/images/zhaoxi_logo.png" fit="contain" />
+          <el-image
+            style="width: 200px; height: 100px"
+            src="/images/zhaoxi_logo.png"
+            fit="contain"
+          />
         </el-link>
       </el-col>
       <el-col :span="8">
-        <el-input 
+        <el-input
           class="w-50 m-2"
           style="margin-top: 30px"
           size="large"
           placeholder="商品搜索"
-          :suffix-icon="Search" 
+          :suffix-icon="Search"
         />
       </el-col>
       <el-col :span="8">
-        <div class="service-item" >
+        <div class="service-item">
           <a id="header-chat" href="javascript:void(0);">
             <span class="icon icon-headset"></span>
             <span class="service-item-info">在线客服</span>
@@ -56,11 +60,11 @@
         </el-menu>
       </el-col>
     </el-row>
-</div>
+  </div>
   <LoginCom />
   <RegisterCom />
 </template>
-<script setup> 
+<script setup>
 import LoginCom from "./LoginCom.vue";
 import RegisterCom from "./RegisterCom.vue";
 import { useStore } from 'vuex'
@@ -68,8 +72,14 @@ const store = useStore()
 const OpenLogin = () => {
   store.commit('OpenLogin')
 }
-const OpenRegister=()=>{
+const OpenRegister = () => {
   store.commit('OpenRegister')
+}
+const LogOut=()=>{
+  //清理vuex状态 //清理localStorage
+  localStorage.removeItem('NickName');
+  localStorage.removeItem('token');
+  store.commit('SettingNickName', undefined)
 }
 </script>
 <style lang="scss">

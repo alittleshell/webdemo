@@ -10,6 +10,14 @@
             <el-form-item label="密码">
                 <el-input v-model="form.Password" type="password" show-password />
             </el-form-item>
+            <el-form-item label="验证码">
+                <el-input v-model="form.ValidateCode" />
+                <el-image
+                    style="width: 200px; height: 100px"
+                    :src="vaildImages"
+                    @click="ChangeImage"
+                />
+            </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="Submit">确定</el-button>
                 <el-button @click="CloseRegister">取消</el-button>
@@ -18,8 +26,25 @@
     </el-dialog>
 </template>
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { useStore } from 'vuex'
+import { Register } from '../http/index'
+import { ElMessage } from 'element-plus'
+import { oriVaildImages, guid, FormatToken } from '../global/index'
+const vaildImages = ref(oriVaildImages.value);
+let ValidateKey = "";
+//组件加载事件
+onMounted(() => {
+    const t = guid();
+    ValidateKey = t;
+    vaildImages.value = oriVaildImages.value + t;
+});
+//点击切换验证码事件
+const ChangeImage = () => {
+    const t = guid();
+    ValidateKey = t;
+    vaildImages.value = oriVaildImages.value + t;
+}
 //vuex
 const store = useStore()
 const IsShowRegister = computed(() => store.state.IsShowRegister)
@@ -33,8 +58,39 @@ form.value = {
     UserName: "",
     Password: "",
 }
-const Submit = () => {
+const Submit = async () => {
     console.log(form.value)
+    var data = {
+        UserName: form.value.UserName,
+        NickName: form.value.NickName,
+        Password: form.value.Password,
+        ValidateKey: ValidateKey,
+        ValidateCode: form.value.ValidateCode,
+    }
+    var res = (await Register(data)).data;
+    if (res.isSuccess) {
+        ElMessage({
+            message: '注册成功！',
+            type: 'success',
+        })
+        let user = JSON.parse(FormatToken(res.result))
+        localStorage["token"] = res.result;
+        //设置全局变量的值
+        store.commit('SettingNickName', user.NickName)
+        //设置localStorage，保证页面刷新后vuex的值可以从里面读，避免刷新后状态丢失
+        localStorage["NickName"] = user.NickName
+        //登录成功后隐藏登录框
+        store.commit('CloseRegister')
+    } else {
+        ElMessage.error(res.msg)
+    }
+
+
+
+
+
+
+
 }
 const CloseRegister = () => {
     store.commit('CloseRegister')

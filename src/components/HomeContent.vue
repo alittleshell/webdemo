@@ -47,7 +47,11 @@ import { getFlowers } from '../http/index'
 import { ref, onMounted } from 'vue'
 const list = ref();
 onMounted(async () => {
-    list.value = (await getFlowers()).data
+    let parms = {
+        Id: 0,
+        Type: 1
+    }
+    list.value = (await getFlowers(parms)).data.result
 })
 </script>
 <style lang="scss">
