@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import instance from './filter'
 //获取首页Banner轮播图
 const json = ref("/json")
-const http = ref("/api")
+const http = ref("http://localhost:7070/api")
 export const getBanners = () => {
     return axios.get(json.value + "/banner.json");
 }

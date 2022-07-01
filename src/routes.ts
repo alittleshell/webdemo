@@ -1,4 +1,4 @@
-import {createRouter,createWebHistory} from 'vue-router'
+import {createRouter,createWebHashHistory} from 'vue-router'
 import HomePage from "./views/HomePage.vue"
 import LoveFlower from "./views/LoveFlower.vue" 
 import BirthdayFlower from "./views/BirthdayFlower.vue" 
@@ -9,7 +9,7 @@ import FlowerPay from "./views/FlowerPay.vue"
 import Personcenter from "./views/PersonCenter.vue"  
 const router = createRouter({
   // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [
     { path: '/', component: HomePage },
     { path: '/loveflower', component: LoveFlower }, 
